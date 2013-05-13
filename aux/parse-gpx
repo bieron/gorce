@@ -1,0 +1,28 @@
+#!/usr/bin/perl -sw
+
+my@data = ("INSERT INTO cottage(name,lat,lon,when_t) VALUES ('", 
+	'', 	#name
+	"',",
+	'',	#lat
+	',',
+	'', 	#lon
+	",'01-05-2013');"
+);
+
+use XML::Parser;
+use Data::Dumper;
+
+my$pl = new XML::Parser(Style => 'Tree');
+my$tree = $pl->parsefile('gorce.gpx');
+#print $#{$tree->[1]},".\n";
+
+my$i = 8;
+local$\ = "\n";
+while( $i < 45 ) {
+	my$temp = $tree->[1][$i];
+	$data[1] = $temp->[12][2];
+	$data[3] = $temp->[0]{lat}; 
+	$data[5] = $temp->[0]{lon};
+	print join '', @data;
+	$i += 4;
+}
