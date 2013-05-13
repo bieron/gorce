@@ -1,28 +1,72 @@
 #!/usr/bin/perl -sw
+package GpxParser;
+use DBI;
+use XML::Parser;
+use Class::Std::Utils	q/ident/;
+use POSIX					q/strftime/;			
 
+my(%dbh_of,%fname_of,%parser_of,%tree_of);
 my@data = ("INSERT INTO cottage(name,lat,lon,when_t) VALUES ('", 
 	'', 	#name
 	"',",
 	'',	#lat
 	',',
 	'', 	#lon
-	",'01-05-2013');"
+	",'",
+	strftime('%F', localtime),#data inicjalizacji MOZE roznic sie od daty feedu do bazy, ale who cares
+"');"
 );
 
-use XML::Parser;
-use Data::Dumper;
-
-my$pl = new XML::Parser(Style => 'Tree');
-my$tree = $pl->parsefile('gorce.gpx');
-#print $#{$tree->[1]},".\n";
-
-my$i = 8;
-local$\ = "\n";
-while( $i < 45 ) {
-	my$temp = $tree->[1][$i];
-	$data[1] = $temp->[12][2];
-	$data[3] = $temp->[0]{lat}; 
-	$data[5] = $temp->[0]{lon};
-	print join '', @data;
-	$i += 4;
+sub new {
+	my($class,$dbname, $fname, $parser_op) = @_;
+	my$new_obj = bless \do{my$anon}, $class;
+	$dbh_of{ident $new_obj} = &connect (%$dbname);
+	$fname_of{ident $new_obj} = $fname;
+	$parser_op ||= {Style => 'Tree'};
+	$parser_of{ident $new_obj} = new XML::Parser( %$parser_op );
+	return $new_obj;
 }
+sub connect {#class function, not method
+	my%arg = @_;
+	$arg{driver}  ||= 'Pg';
+	$arg{host}    ||= 'localhost';
+	$arg{options} ||= {RaiseError => 1};
+
+	return DBI->connect(
+		"DBI:$arg{driver}:dbname=$arg{dbname};host=$arg{host}", 
+		$arg{user}, $arg{pass}, $arg{options}
+	);
+}
+sub parse {
+	my$self = shift;
+	$tree_of{ident $self} = $parser_of{ident $self}->parsefile( $fname_of{ident $self} );
+	return $self;#for chaining
+}
+sub feed {
+	my$self = shift;
+	local $\ = "\n";
+	my$tree = $tree_of{ident $self};
+	my$dbh = $dbh_of{ident $self};
+
+	my$i = 8;
+	local$\ = "\n";
+	FEED:
+	while( 1 ) {
+		my$temp = $tree->[1][$i];
+		last FEED if ($temp->[3] eq 'name');#koniec waypointów, GPS eksportuje je pierwsze
+		$data[1] = $temp->[12][2];
+		$data[3] = $temp->[0]{lat}; 
+		$data[5] = $temp->[0]{lon};
+		print join '',@data;
+#		my$sth = $dbh->prepare(join '', @data);
+#		$sth->execute();
+		$i += 4;
+	}
+	return $i/4 - 2;#2 = 8/4
+}
+#################################3
+package main;
+
+my$db_data = {driver => 'Pg', dbname => 'gorce', user => 'jb', pass => 'pass'};
+my$p = new GpxParser($db_data, 'gorce.gpx');
+print $p->parse->feed;
