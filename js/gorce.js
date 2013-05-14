@@ -23,6 +23,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 		mapOptions);
 
 	google.maps.event.addListener(map, 'mousemove', function(ev) { feedLL(ev.latLng,0) })
+	google.maps.event.addListener(map, 'click', function(ev) { m = ev.latLng; console.log(m) })
 	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
 	var cache = {}
 	$.getJSON('ajax/gorce.cgi').always(function(data) {
@@ -33,7 +34,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 				title: item.name,
 				animation: google.maps.Animation.DROP,
 			})
-			m = marker
+//			m = marker
 			switch(item.state) {
 			case 1: case 2: case 3: case 4: case 5: case 6:
 				legendary.hut.push( marker ); 
