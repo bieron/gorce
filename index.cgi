@@ -1,5 +1,5 @@
 #!/usr/bin/perl -sw
-#use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
+use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
 use CGI;
 
 sub include {
@@ -26,8 +26,8 @@ if($cookie) {
 			-name=>'welcome',
 			-value=>'home',
 			-expires=>'0',
-#			-path=>'/~jbieron/gorce.dev'
-			-path=>'/'
+			-path=>'/~jbieron/gorce.dev'
+#			-path=>'/'
 		);
 		print $qry->header(
 			-cookie => $cookie, 

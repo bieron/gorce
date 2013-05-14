@@ -1,11 +1,16 @@
 function toLL( i, l ) { 
-	i = (i*100000).toFixed()/100000 
+	i = (i*1000000).toFixed()/1000000 
 	z = 0;
 	if(i < 0) 
 		i *= -1, ++z;
 	return i+=l[z]
 }
-var m;
+function changeOverview( html ) {
+	overview.animate({opacity:0},{duration:250, complete:function() {
+		overview.html(html); overview.animate({opacity:1},250) }
+	})
+}
+//var m;
 function feedLL(pos, flag) {
 	if(flag) latLng.addClass('important')
 	else	 latLng.removeClass('important')
@@ -23,9 +28,9 @@ google.maps.event.addDomListener(window, 'load', function() {
 		mapOptions);
 
 	google.maps.event.addListener(map, 'mousemove', function(ev) { feedLL(ev.latLng,0) })
-	google.maps.event.addListener(map, 'click', function(ev) { m = ev.latLng; console.log(m) })
 	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
 	var cache = {}
+	var first = true
 	$.getJSON('ajax/gorce.cgi').always(function(data) {
 		$.each( data, function( i, item ) {
 			var marker = new google.maps.Marker({
@@ -51,18 +56,23 @@ google.maps.event.addDomListener(window, 'load', function() {
 			}
 			
 			google.maps.event.addDomListener(marker,'click', function() {
+				if(first) {
+					first = false
+					$('.map-box').animate({marginRight:'340px'},500)
+					$('.overview-box').animate({width:'340px'},500)
+				}
 				if(typeof(cache[item.id])!='undefined') {
-					overview.html( cache[item.id] );
+					//overview.html( cache[item.id] );
+					changeOverview( cache[item.id] )
 					return;
 				}
-				overview.html('<h2>' + item.name + '</h2>');
-				$.getJSON('ajax/gorce.cgi?id=' + item.id).always(function(data) {
-					var html = '<ul>'
+				$.getJSON('ajax/gorce.cgi?id=' + item.id).success(function(data) {
+					var html = '<h2>' + item.name + '</h2><ul>'
 					for(var i in data)
 						html += '<li><img alt="'+ item.name +'" src="photos/' + data[i] + '.jpg"></li>'
 					html += '</ul>'
-					cache[item.id] = overview.html() + html
-					overview.append(html)
+					cache[item.id] = html
+					changeOverview(html)
 				})
 			})
 			google.maps.event.addListener(marker, 'mouseover', function(ev) {

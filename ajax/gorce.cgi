@@ -1,5 +1,5 @@
 #!/usr/bin/perl -sw
-#use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
+use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
 use DBI;
 use CGI;
 
@@ -8,8 +8,8 @@ my%heads = map { $_ => $q->http($_) } $q->http();
 unless($heads{HTTP_X_REQUESTED_WITH}) {
   	print $q->redirect('http://student.agh.edu.pl/~jbieron/gorce.dev');
 }
-my$dbh = DBI->connect('DBI:SQLite:/var/www/gorce.dev/aux/gorce-dev.db');
-#my$dbh = DBI->connect('DBI:SQLite:../aux/gorce-dev.db');
+#my$dbh = DBI->connect('DBI:SQLite:/var/www/gorce.dev/aux/gorce-dev.db');
+my$dbh = DBI->connect('DBI:SQLite:../aux/gorce-dev.db');
 
 print 'Content-Type: application/json',"\n\n";
 $rsp = '[';
