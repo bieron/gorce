@@ -1,5 +1,5 @@
 body,ul,li,h1,h2,p {margin:0;padding:0; list-style:none}
-html, body {height:100%}
+.stretch {height:100%}
 .overview-box h2 {margin:0 0 12px; padding:0 0 3px; text-align:center; font-size:19px; border-bottom:1px solid #448}
 body {position:relative}
 .map-box {margin-right:340px; height:100%; position:relative}
@@ -17,3 +17,7 @@ body {position:relative}
 #legend li {display:inline; padding:0 0 0 20px; background:url('') no-repeat}
 #legend a {text-decoration:none; color:#fee; letter-spacing:1px}
 #legend a.pressed, .important {color:#b00}
+
+/*form.html*/
+.moria-gate {margin:230px auto; padding:30px; text-align:center; width:250px; background:#eef}
+.moria-gate input {width:215px; margin:12px 0 0}

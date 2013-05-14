@@ -1,8 +1,16 @@
 #!/usr/bin/perl -sw
+use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
 use DBI;
-my$dbh = DBI->connect('DBI:Pg:dbname=gorce;host=localhost', 'jb','pass',{RaiseError => 1});
+use CGI;
 
-print  "Content-type: application/json\n\n";
+my$q = new CGI;
+my%heads = map { $_ => $q->http($_) } $q->http();
+unless($heads{HTTP_X_REQUESTED_WITH}) {
+  	print $q->redirect('http://student.agh.edu.pl/~jbieron/gorce.dev');
+}
+my$dbh = DBI->connect('DBI:SQLite:../aux/gorce-dev.db');
+
+print $q->header('application/json');
 $rsp = '[';
 if ($ENV{QUERY_STRING}) {
 	die unless $ENV{QUERY_STRING} =~ /id=\d+/;

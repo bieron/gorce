@@ -25,7 +25,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	google.maps.event.addListener(map, 'mousemove', function(ev) { feedLL(ev.latLng,0) })
 	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
 	var cache = {}
-	$.getJSON('ajax/gorce.pl').always(function(data) {
+	$.getJSON('ajax/gorce.cgi').always(function(data) {
 		$.each( data, function( i, item ) {
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng( item.lat, item.lon ),
@@ -55,7 +55,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 					return;
 				}
 				overview.html('<h2>' + item.name + '</h2>');
-				$.getJSON('ajax/gorce.pl?id=' + item.id).always(function(data) {
+				$.getJSON('ajax/gorce.cgi?id=' + item.id).always(function(data) {
 					var html = '<ul>'
 					for(var i in data)
 						html += '<li><img alt="'+ item.name +'" src="photos/' + data[i] + '.jpg"></li>'
