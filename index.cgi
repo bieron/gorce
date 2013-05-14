@@ -8,10 +8,15 @@ if($cookie) {
 	print $qry->header(-charset => 'utf-8');
 	open(my$read, '<', 'html/welcome.html');
 	while(<$read>) { chomp; print }
+	close $read;
 } else {
 	my$label = 'Powiedz przyjacielu i wejdź';
 	my$pass = lc $qry->param('pass');
-	if($pass eq 'q') {
+	open my$read, '<', 'aux/phrase';
+	my$phrase = <$read>;
+	close $read;
+	chomp $phrase;
+	if($pass eq $phrase) {
 		$cookie = $qry->cookie(
 			-name=>'welcome',
 			-value=>'home',
@@ -32,4 +37,5 @@ if($cookie) {
 		if($_ eq '=') {print $label}
 		else {print}
 	}
+	close $read;
 }
