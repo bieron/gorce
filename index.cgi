@@ -11,7 +11,7 @@ if($cookie) {
 	close $read;
 } else {
 	my$label = 'Powiedz przyjacielu i wejdź';
-	my$pass = lc $qry->param('pass');
+	my$pass = $qry->param('pass');
 	open my$read, '<', 'aux/phrase';
 	my$phrase = <$read>;
 	close $read;
@@ -27,7 +27,7 @@ if($cookie) {
 			-cookie => $cookie, 
 			-charset=>'utf-8', 
 			-Location => $qry->url() );
-	} elsif($pass eq 'mellon') {
+	} elsif(lc $pass eq 'mellon') {
 		$label = '...srsly?';
 	} 
 	print $qry->header(-charset => 'utf-8');
