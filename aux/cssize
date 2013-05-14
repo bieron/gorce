@@ -1,0 +1,22 @@
+#!/usr/bin/perl -sw
+
+print STDERR 'no file specified' unless @ARGV;
+
+for my$fname (@ARGV) {
+	open my$file, '<', $fname or die "$fname not found";
+	my$line;
+	while($line = <$file>) {
+		$line =~ s/^\s*(.*?)\s*$/$1/;
+		$line =~ s/:\s*/:/g;
+		$line =~ s/;\s*/; /g;
+		$line =~ s/;?\s*}/}/g;
+		$line =~ s|/\*\s*||;
+		chomp $line;
+		print $line;
+		if ($line =~ /}|\*\/$/) {
+			print "\n";
+		}
+		
+	}
+	close $file;
+}

@@ -1,21 +1,25 @@
-	<div class="map-box">
-		<div id="map-canvas"></div>
-		<div class="latLng-box">
-			<p id="latLng">49.497575N, 20.275964E</p>
-		</div>
-		<div class="legend-box">
-              <div id="legend"><ul>
-              	<li><a class="toggle-btn pressed" id="hutBtn" href="#huts">bacówki</a></li>
-              	<li><a class="toggle-btn pressed" id="amboBtn" href="#ambos">ambony</a></li>
-              	<li><a class="toggle-btn pressed" id="BeneBtn" href="#Bene">Bene</a></li>
-              	<li><a class="toggle-btn pressed" id="shelterBtn" href="#shelters">schroniska</a></li>
-              	<li><a class="toggle-btn pressed" id="otherBtn" href="#other">inne</a></li>
-              </ul></div>
-		</div>
+	<div class="header">
+		<h1><span class="important">G</span>orczańskie <span class="important">B</span>acówki</h1>
+		<div class="coords"><p id="latLng">49.497575N, 20.275964E</p></div>
 	</div>
-	<aside class="overview-box">
-		<div id="overview"></div>
-	</aside>
+	
+	<div class="wrapper">
+		<div class="map-box">
+			<div class="legend-box">
+			<ul id="legend">
+				<li><a class="toggle-btn pressed" id="hutBtn" href="#huts">bacówki</a></li>
+				<li><a class="toggle-btn pressed" id="amboBtn" href="#ambos">ambony</a></li>
+				<li><a class="toggle-btn pressed" id="BeneBtn" href="#Bene">Bene</a></li>
+				<li><a class="toggle-btn pressed" id="shelterBtn" href="#shelters">schroniska</a></li>
+				<li><a class="toggle-btn pressed" id="otherBtn" href="#other">inne</a></li>
+			</ul>
+		</div>
+			<div id="map-canvas"></div>
+		</div>
+		<aside class="overview-box">
+			<div id="overview"></div>
+		</aside>
+	</div>
 	<script type="text/javascript" src="js/jq.js"></script>
 	<script type="text/javascript" src="js/gorce.js"></script>
 </body></html>

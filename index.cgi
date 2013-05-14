@@ -26,8 +26,8 @@ if($cookie) {
 			-name=>'welcome',
 			-value=>'home',
 			-expires=>'0',
-			-path=>'/~jbieron/gorce.dev'
-#			-path=>'/'
+#			-path=>'/~jbieron/gorce.dev'
+			-path=>'/'
 		);
 		print $qry->header(
 			-cookie => $cookie, 

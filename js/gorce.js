@@ -10,7 +10,7 @@ function changeOverview( html ) {
 		overview.html(html); overview.animate({opacity:1},250) }
 	})
 }
-//var m;
+function resize() {resizing.height( window.innerHeight - 62)}
 function feedLL(pos, flag) {
 	if(flag) latLng.addClass('important')
 	else	 latLng.removeClass('important')
@@ -18,7 +18,10 @@ function feedLL(pos, flag) {
 }
 var overview = $("#overview");
 var latLng = $("#latLng");
+var resizing = $('.wrapper,.overview-box');
 google.maps.event.addDomListener(window, 'load', function() {
+	resize()
+	window.onresize = resize
 	var mapOptions = {
 		 center: new google.maps.LatLng(49.56, 20.14),
 		 zoom: 12,
@@ -61,8 +64,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 					$('.map-box').animate({marginRight:'340px'},500)
 					$('.overview-box').animate({width:'340px'},500)
 				}
+				$('.overview-box').mouseover(function() {feedLL(marker.position, 1)})
 				if(typeof(cache[item.id])!='undefined') {
-					//overview.html( cache[item.id] );
 					changeOverview( cache[item.id] )
 					return;
 				}

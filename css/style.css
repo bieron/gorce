@@ -1,22 +1,20 @@
-body,ul,li,h1,h2,p {margin:0;padding:0; list-style:none}
-.stretch {height:100%}
-.overview-box h2 {margin:25px; padding:0 0 3px; text-align:center; font-size:19px; border-bottom:1px solid #448}
-body {position:relative}
-.map-box {height:100%; position:relative}
-#map-canvas {height: 100%} 
-/*#overview {padding:15px 20px 0}*/
-.overview-box { position:absolute; right:0; top:0; height:100%; overflow-y:auto; border-left:1px solid #448; background:#99a}
+body, ul, li, h1, h2, p {margin:0; padding:0; list-style:none}
+h1 {font-size:25px; font-weight:100; padding:17px 0 0 70px; text-shadow:#cce 1px 1px}
+.header {height:60px; position:relative}
+.legend-box {position:absolute; top:-1px; width:100%}
+.overview-box h2 {margin:25px; padding:0 0 3px; text-align:center; font-size:19px; border-bottom:1px solid #888}
+.map-box {height:100%; position:relative; border:1px solid #888}
+#map-canvas {height:100%}
+.overview-box {position:absolute; right:0; top:60px; overflow-y:auto}
 .overview-box li {margin:0 auto 10px; padding:0; text-align:center}
-.overview-box img {max-width:220px; max-height:220px; border:1px solid #448}
-.latLng-box {width:100%; position:absolute; bottom:0; text-align:center}
-#latLng {margin:auto; font-size:11px; padding:10px; background:#99a; width:150px}
-.legend-box {position:absolute; top:4px; width:100%}
-#legend {margin:auto; text-align:center}
+.overview-box img {max-width:220px; max-height:220px; border:1px solid #888}
+.coords {position:absolute; top:0; right:0; text-align:center}
+#latLng {color:#888; font-family:'courier new'; font-size:14px; padding:22px 10px; width:220px}
+#legend {margin:auto; text-align:center; background:#fff; border-radius:0 0 18px 18px; border:1px solid #888; border-top:0; position:relative; padding:5px 0 9px; width:430px; font-size:12px; z-index:1; }
 #legend ul {display:inline; padding:11px 20px; background:#99a; font-size:11px}
 #legend li {display:inline; padding:0 0 0 20px; background:url('') no-repeat}
-#legend a {text-decoration:none; color:#fee; letter-spacing:1px}
-#legend a.pressed, .important {color:#b00}
-
+#legend a {text-decoration:none; color:#888; letter-spacing:1px}
+#legend a.pressed, #latLng.important, .important {color:#b00}
 /*form.html*/
 .moria-gate {margin:230px auto; padding:30px; text-align:center; width:250px; background:#eef}
 .moria-gate input {width:215px; margin:12px 0 0}
