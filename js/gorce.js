@@ -1,33 +1,69 @@
-var legend = $("#legend");
+function toLL( i, l ) { 
+	i = (i*100000).toFixed()/100000 
+	z = 0;
+	if(i < 0) 
+		i *= -1, ++z;
+	return i+=l[z]
+}
+var overview = $("#overview");
+var latLng = $("#latLng");
 google.maps.event.addDomListener(window, 'load', function() {
 	var mapOptions = {
 		 center: new google.maps.LatLng(49.56, 20.14),
 		 zoom: 12,
 		 mapTypeId: google.maps.MapTypeId.TERRAIN
-	  };
-	  var map = new google.maps.Map(document.getElementById("map-canvas"),
-			mapOptions);
+	};
+	var map = new google.maps.Map(document.getElementById("map-canvas"),
+		mapOptions);
 
+	google.maps.event.addListener(map, 'mousemove', function(ev) {
+		latLng.html( toLL( ev.latLng.lat(), 'NS' ) + ', ' + toLL( ev.latLng.lng(), 'EW' ) )
+	})
+	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
+	var cache = {}
 	$.getJSON('ajax/gorce.pl').always(function(data) {
-		//console.log(data)
-
 		$.each( data, function( i, item ) {
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng( item.lat, item.lon ),
 				map: map,
 				title: item.name
 			})
+			switch(item.state) {
+			case 1: case 2: case 3: case 4: case 5: case 6:
+				legendary.hut.push( marker ); break
+			case 7: case 8:
+				legendary.ambo.push( marker ); break
+			case 11:
+				legendary.Bene.push( marker ); break
+			case 12:
+				legendary.shelter.push( marker ); break
+			default:
+				legendary.other.push( marker )
+			}
+			
 			google.maps.event.addDomListener(marker,'click', function() {
-				var title = '<h2>' + item.name + '</h2>';
-				legend.html(title);
+				if(typeof(cache[item.id])!='undefined') {
+					overview.html( cache[item.id] );
+					return;
+				}
+				overview.html('<h2>' + item.name + '</h2>');
 				$.getJSON('ajax/gorce.pl?id=' + item.id).always(function(data) {
 					var html = '<ul>'
 					for(var i in data)
-						html += '<li><img src="photos/' + data[i] + '.jpg"></li>'
-					legend.html(title + html)
+						html += '<li><img alt="'+ item.name +'" src="photos/' + data[i] + '.jpg"></li>'
+					html += '</ul>'
+					cache[item.id] = overview.html() + html
+					overview.append(html)
 				})
 			})
 		})
-	
+		$.each({'#hutBtn': 'hut', '#amboBtn':'ambo', '#BeneBtn': 'Bene', '#shelterBtn': 'shelter', '#otherBtn': 'other'}, function(i,el) {
+			$(i).click(function() {
+			if(legendary[el].length==0) return
+			var desired = !legendary[el][0].visible
+			for(var m in legendary[el])
+				legendary[el][m].setVisible( desired )
+			})	
+		})
 	})
 })

@@ -6,7 +6,7 @@ use Class::Std::Utils	q/ident/;
 use POSIX					q/strftime/;			
 
 my(%dbh_of,%fname_of,%parser_of,%tree_of);
-my@data = ("INSERT INTO cottage(name,lat,lon,when_t) VALUES ('", 
+my@data = ("INSERT INTO hut(name,lat,lon,when_t) VALUES ('", 
 	'', 	#name
 	"',",
 	'',	#lat
