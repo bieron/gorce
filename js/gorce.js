@@ -5,6 +5,12 @@ function toLL( i, l ) {
 		i *= -1, ++z;
 	return i+=l[z]
 }
+var m;
+function feedLL(pos, flag) {
+	if(flag) latLng.addClass('important')
+	else	 latLng.removeClass('important')
+	latLng.html( toLL( pos.lat(), 'NS' ) + ', ' + toLL( pos.lng(), 'EW' ) )
+}
 var overview = $("#overview");
 var latLng = $("#latLng");
 google.maps.event.addDomListener(window, 'load', function() {
@@ -16,9 +22,7 @@ google.maps.event.addDomListener(window, 'load', function() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"),
 		mapOptions);
 
-	google.maps.event.addListener(map, 'mousemove', function(ev) {
-		latLng.html( toLL( ev.latLng.lat(), 'NS' ) + ', ' + toLL( ev.latLng.lng(), 'EW' ) )
-	})
+	google.maps.event.addListener(map, 'mousemove', function(ev) { feedLL(ev.latLng,0) })
 	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
 	var cache = {}
 	$.getJSON('ajax/gorce.pl').always(function(data) {
@@ -26,11 +30,15 @@ google.maps.event.addDomListener(window, 'load', function() {
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng( item.lat, item.lon ),
 				map: map,
-				title: item.name
+				title: item.name,
+				animation: google.maps.Animation.DROP,
 			})
+			m = marker
 			switch(item.state) {
 			case 1: case 2: case 3: case 4: case 5: case 6:
-				legendary.hut.push( marker ); break
+				legendary.hut.push( marker ); 
+				marker.setIcon('https://maps.gstatic.com/mapfiles/ms2/micons/campground.png')
+				break
 			case 7: case 8:
 				legendary.ambo.push( marker ); break
 			case 11:
@@ -56,14 +64,22 @@ google.maps.event.addDomListener(window, 'load', function() {
 					overview.append(html)
 				})
 			})
+			google.maps.event.addListener(marker, 'mouseover', function(ev) {
+				feedLL(marker.position, 1)
+			})
 		})
 		$.each({'#hutBtn': 'hut', '#amboBtn':'ambo', '#BeneBtn': 'Bene', '#shelterBtn': 'shelter', '#otherBtn': 'other'}, function(i,el) {
 			$(i).click(function() {
+			$(this).toggleClass('pressed')
 			if(legendary[el].length==0) return
 			var desired = !legendary[el][0].visible
 			for(var m in legendary[el])
 				legendary[el][m].setVisible( desired )
-			})	
+			})
 		})
+	})
+	//set entry state
+	google.maps.event.addListenerOnce(map, 'idle', function(){
+		$('#BeneBtn,#shelterBtn').click()
 	})
 })
