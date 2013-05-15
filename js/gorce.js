@@ -16,19 +16,20 @@ function feedLL(pos, flag) {
 	else	 latLng.removeClass('important')
 	latLng.html( toLL( pos.lat(), 'NS' ) + ', ' + toLL( pos.lng(), 'EW' ) )
 }
-var overview = $("#overview");
-var latLng = $("#latLng");
-var resizing = $('.wrapper,.overview-box');
+var startLL = new google.maps.LatLng(49.56, 20.14)
+var overview = $("#overview")
+var latLng = $("#latLng")
+var resizing = $('.wrapper,.overview-box')
+var m
 google.maps.event.addDomListener(window, 'load', function() {
 	resize()
 	window.onresize = resize
 	var mapOptions = {
-		 center: new google.maps.LatLng(49.56, 20.14),
+		 center: startLL,
 		 zoom: 12,
 		 mapTypeId: google.maps.MapTypeId.TERRAIN
 	};
-	var map = new google.maps.Map(document.getElementById("map-canvas"),
-		mapOptions);
+	var map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions)
 
 	google.maps.event.addListener(map, 'mousemove', function(ev) { feedLL(ev.latLng,0) })
 	var legendary = {'hut': [], 'ambo': [], 'other': [], 'shelter': [], 'Bene': []}
@@ -91,7 +92,8 @@ google.maps.event.addDomListener(window, 'load', function() {
 				legendary[el][m].setVisible( desired )
 			})
 		})
-	})
+	})//end json get markers
+	$('#resetBtn').click(function(){ map.panTo(startLL); map.setZoom(12); return false})
 	//set entry state
 	google.maps.event.addListenerOnce(map, 'idle', function(){
 		$('#BeneBtn,#shelterBtn').click()

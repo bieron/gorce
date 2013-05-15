@@ -1,5 +1,7 @@
 body, ul, li, h1, h2, p {margin:0; padding:0; list-style:none}
-h1 {font-size:25px; font-weight:100; padding:17px 0 0 70px; text-shadow:#cce 1px 1px}
+h1 {font-size:25px; font-weight:100; padding:17px 70px 13px; text-shadow:#cce 1px 1px}
+.header a {text-decoration:none; color:inherit}
+.header a:active h1 {padding-top:18px; padding-left:69px}
 .header {height:60px; position:relative}
 .legend-box {position:absolute; top:-1px; width:100%}
 .overview-box h2 {margin:25px; padding:0 0 3px; text-align:center; font-size:19px; border-bottom:1px solid #888}
@@ -18,3 +20,4 @@ h1 {font-size:25px; font-weight:100; padding:17px 0 0 70px; text-shadow:#cce 1px
 /*form.html*/
 .moria-gate {margin:230px auto; padding:30px; text-align:center; width:250px; background:#eef}
 .moria-gate input {width:215px; margin:12px 0 0}
+.moria-gate input[type=submit] {height:23px}
