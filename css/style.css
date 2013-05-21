@@ -19,5 +19,5 @@ h1 {font-size:25px; font-weight:100; padding:17px 70px 13px; text-shadow:#cce 1p
 #legend a.pressed, #latLng.important, .important {color:#b00}
 /*form.html*/
 .moria-gate {margin:230px auto; padding:30px; text-align:center; width:250px; background:#eef}
-.moria-gate input {width:215px; margin:12px 0 0}
+.moria-gate input {width:215px; margin:12px 0 0; text-align:center}
 .moria-gate input[type=submit] {height:23px}

@@ -2,47 +2,70 @@
 use lib '/home/eaiibgrp/jbieron/perl_modules/lib';
 use CGI;
 
+sub root {
+	my$q = shift;
+	my$str = $q->url( -absolute => 1 );
+	return substr($str, 0, rindex($str, '/'));
+}
 sub include {
 	open my$fh, '<', shift;
 	while(<$fh>) {chomp; print}
 	close $fh;
 }
+sub anal {
+	my($cookie,$first) = @_;
+	open my$anal, '>>', 'anal.txt';
+	print $anal $cookie, '|';
+	if($first) {
+		print $anal 'first';
+		#print $anal $cookie->value. '|';
+	} else {
+		print $anal localtime();
+	}
+	print $anal '|', $ENV{HTTP_USER_AGENT}, "\n";
+	close $anal;
+}
 
-my$qry = new CGI;
-my$cookie = $qry->cookie('welcome');
+my$q = new CGI;
+my$cookie = $q->cookie('welcome');
 
 if($cookie) {
-	print $qry->header(-charset => 'utf-8');
+	anal( $cookie, 0 );
+	print $q->header(-charset => 'utf-8');
 	include 'html/head.html';
 	include 'html/welcome.html';
 #end
 } else {
 	my$label = 'Powiedz przyjacielu i wejdź';
-	my$pass = $qry->param('pass');
+	my$pass = $q->param('pass') || '';
 	open my$read, '<', 'aux/phrase' or die 'Nie mogę sprawdzić hasła';
 	my$phrase = <$read>;
 	close $read;
 	chomp $phrase;
 	
 	if($pass eq $phrase) {
-		$cookie = $qry->cookie(
+		#my$time = localtime;
+		$cookie = $q->cookie(
 			-name=>'welcome',
-			-value=>'home',
+			-value=> time,
 			-expires=>'0',
 #			-path=>'/~jbieron/gorce.dev'
-			-path=>'/'
+#			-path=>'/'
+			-path=> root($q)
 		);
-		print $qry->header(
+		anal( $cookie, 1 );
+
+		print $q->header(
 			-cookie => $cookie, 
 			-charset=>'utf-8', 
-			-Location => $qry->url() 
+			-Location => $q->url() 
 		);
 #end
 	} 
 	if(lc $pass eq 'mellon') {
 		$label = '...srsly?';
 	} 
-	print $qry->header(-charset => 'utf-8');
+	print $q->header(-charset => 'utf-8');
 	include 'html/head.html';
 	open $read, '<', 'html/form.html';
 	while(<$read>) { 
